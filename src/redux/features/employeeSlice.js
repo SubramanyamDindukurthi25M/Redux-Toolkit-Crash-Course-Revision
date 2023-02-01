@@ -1,26 +1,42 @@
 import {
-    createSlice,
-    createAsyncThunk
+    createSlice
 } from "@reduxjs/toolkit"
-import axios from "axios"
+
+const usersData = [{
+        name: "Golden Corn",
+        checked: false
+    },
+
+    {
+        name: "Paneer",
+        checked: false
+    },
+
+    {
+        name: "Tomato",
+        checked: false
+    },
+
+    {
+        name: "Mushroom",
+        checked: false
+    },
+
+    {
+        name: "Onion",
+        checked: false
+    },
+
+    {
+        name: "Black Olives",
+        checked: false
+    }
+]
 
 // Initial state
 const initialState = {
-    employeesData: [],
-    isBoolean: false,
-    errorMessage: null,
+    employeesData: usersData
 }
-
-// Create thunk
-export const fetchEmployeesByUrl = createAsyncThunk(
-    'users/fetchEmployees',
-    // API call
-    async () => {
-        const baseUrl = 'https://jsonplaceholder.typicode.com/todos'
-        const response = await axios.get(baseUrl)
-        return response.data
-    }
-)
 
 // Creating slice
 const employeeSlice = createSlice({
@@ -28,34 +44,21 @@ const employeeSlice = createSlice({
     initialState,
     reducers: {
         updateCheckBox: (state, action) => {
-            state.employees = state.employeesData.map((ele) => {
+            state.employees = state.employeesData.map((ele, i) => {
                 const {
-                    id,
-                    completed
+                    checked
                 } = ele;
-                if (id === action.payload) {
+                if (+i === action.payload) {
                     return {
                         ...ele,
-                        completed: !completed
+                        checked: !checked
                     }
+                } else {
+                    return ele;
                 }
             })
         }
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchEmployeesByUrl.pending, (state) => {
-                state.isBoolean = true
-            })
-            .addCase(fetchEmployeesByUrl.fulfilled, (state, action) => {
-                state.isBoolean = false
-                state.employeesData = action.payload
-            })
-            .addCase(fetchEmployeesByUrl.rejected, (state) => {
-                state.isBoolean = false
-                state.errorMessage = 'network-issue'
-            })
-    }
 })
 
 // exporting actions

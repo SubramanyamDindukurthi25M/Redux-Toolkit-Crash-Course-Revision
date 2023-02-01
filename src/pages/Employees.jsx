@@ -1,6 +1,10 @@
-import { useEffect } from "react"
-import { useSelector,useDispatch } from "react-redux"
-import { fetchEmployeesByUrl,updateCheckBox} from "../redux/features/employeeSlice"
+import {
+    useSelector,
+    useDispatch
+} from "react-redux"
+import {
+    updateCheckBox
+} from "../redux/features/employeeSlice"
 
 export const Employees = () => {
     const getEmployeesData = useSelector((state) => {
@@ -12,32 +16,27 @@ export const Employees = () => {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchEmployeesByUrl())
-    }, [dispatch]);
-
     const handleCheckBox = (id) => {
         dispatch(updateCheckBox(id))
     }
 
     const checkBoxSkeleton = (
-        employeesData.map((ele) => {
+        employeesData.map((ele,i) => {
             const {
-                id,
-                title,
-                completed
+                name,
+                checked
             } = ele;
             return (
-                <li className="list-group-item" key={id}>
+                <li className="list-group-item" key={i}>
                     <div className="form-check">
                         <input 
                             type="checkbox"  
                             className="form-check-input"
-                            checked={completed}
-                            onChange={() => handleCheckBox(id)}
+                            checked={checked}
+                            onChange={() => handleCheckBox(i)}
                         />
                         <label className="form-check-label">
-                            {title}
+                            {name}
                         </label>
                     </div>
                 </li>
@@ -46,23 +45,21 @@ export const Employees = () => {
     )
 
     const cardSkeleton = (
-        employeesData.map((ele) => {
+        employeesData.map((ele,i) => {
             const {
-                id,
-                title,
-                completed
+                name,checked
             } = ele;
             return (
-                <section key={id}>
+                <section key={i}>
                     {
-                        completed && <div className="card my-2">
+                        checked && <div className="card my-2">
                             <div className="card-body">
                                 <ul className="list-group">
                                     <li className="list-group-item">
-                                        Id : {id}
+                                        Id : {i}
                                     </li>
                                     <li className="list-group-item">
-                                        Title : {title}
+                                        Name : {name}
                                     </li>
                                 </ul>
                             </div>
